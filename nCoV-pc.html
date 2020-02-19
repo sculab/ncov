@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+      <div style="height: 100%;width:40%;float: right">
+      <div style="height: 40%;width:100%">
+      	 <div id="container3" style="height: 100%;width:50%;float: left"></div>
+       	<div id="container2" style="height: 100%;width:50%;float: right"></div>
+   </div>
+       <div id="container1" style="height: 60%;width:100%"></div>
+       
+       </div>
+      <div id="container" style="height: 100%;width:60%;float: left"></div>
+       
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="./data.js"></script>
+       <script type="text/javascript">		 
+var dom = document.getElementById("container");
+var my_cate = window.my_cate;
+var dead_rate = window.dead_rate;
+var my_data = window.my_data;
+var my_title = window.my_title;
+var my_confirm = window.my_confirm;
+var my_cure = window.my_cure;
+var my_dead = window.my_dead;
+var last_confirm = window.last_confirm;
+var last_cure = window.last_cure;
+var last_dead = window.last_dead;
+var dead_rate = window.dead_rate;
+var count = 0;
+var max_count = window.max_count;
+var myChart = echarts.init(dom, 'dark');
+var app = {};
+option = null;
+option = {
+    title: {
+        text: "2020-01-01",
+        x: "center",
+		y: 60,
+        textStyle: {
+            fontSize: 44,
+            color: "rgb(192, 192, 192)"
+        },
+        subtextStyle: {
+            fontSize: 18
+        }
+    },
+    tooltip: {
+        trigger: "item"
+    },
+    dataRange: {
+        min: 0,
+        max: 1000,
+        x: 80,
+        text: [">1000", "0"],
+        color: ["rgb(128, 0, 0)", "rgb(255, 128, 96)", "rgb(255, 255, 192)"],
+        y: "70%",
+        calculable: false
+    },
+    toolbox: {
+        orient: "vertical",
+        x: "right",
+        y: "bottom",
+        feature: {
+            dataView: {
+                show: true,
+                readOnly: false
+            },
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            },
+            mark: {
+                show: true
+            }
+        },
+        show: false
+    },
+    roamController: {
+        x: "right",
+        mapTypeControl: {
+            china: true
+        },
+        show: false
+    },
+    series: [
+        {
+            name: "确诊",
+            type: "map",
+            mapType: "china",
+            roam: false,
+            mapValueCalculation: "sum",
+            itemStyle: {
+                normal: {
+                    borderWidth: 2,
+                    borderColor: "rgba(170, 170, 170, 0.8)",
+                    label: {
+                        show: true,
+                        textStyle: {
+                            fontSize: 14,
+			color: "rgb(128, 128, 128)"
+                        },
+                    }
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        textStyle: {
+                            fontSize: 14,
+			color: "rgb(0, 127, 255)"
+                        }
+                    }
+                }
+            },
+            data: []
+        }
+    ]
+};
+
+var dom1 = document.getElementById("container1");
+var myChart1 = echarts.init(dom1, 'dark');
+option1 = null;
+option1 ={
+    tooltip: {
+        trigger: "axis",
+        show: false,
+        textStyle: {
+            fontSize: 20,
+            color: "#333"
+        },
+        hideDelay: 3000,
+        islandFormatter: "{a} <br>{b} : {c}"
+    },
+    legend: {
+        data: ["确诊", "治愈", "死亡"],
+        x: "center",
+        textStyle: {
+            fontSize: 20
+        },
+        itemHeight: 24,
+        itemWidth: 24,
+        itemGap: 10
+    },
+    toolbox: {
+	show: false,
+        feature: {
+	
+            mark: {
+                show: true
+            },
+            dataView: {
+                show: true,
+                readOnly: true
+            },
+            magicType: {
+                show: false,
+                type: ["line", "bar"]
+            },
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type: "category",
+            boundaryGap: false,
+            data: []
+        }
+    ],
+    yAxis: [
+        {
+            type: "value"
+        }
+    ],
+    series: [
+        {
+            name: "确诊",
+            type: "line",
+            data: [],
+            itemStyle: {
+                normal: {
+                    color: "rgb(0, 127, 255)",
+                    lineStyle: {
+                        width: 4
+                    }
+                }
+            },
+            smooth: true,
+            symbolSize: 4
+        },
+        {
+            name: "治愈",
+            type: "line",
+            data: [],
+            itemStyle: {
+                normal: {
+                    color: "rgb(153, 204, 51)",
+                    lineStyle: {
+                        width: 4
+                    }
+                }
+            },
+            smooth: true,
+            symbolSize: 4
+        },
+        {
+            type: "line",
+            name: "死亡",
+            data: [],
+            itemStyle: {
+                normal: {
+                    color: "rgb(255, 86, 86)",
+                    lineStyle: {
+                        width: 4
+                    }
+                }
+            },
+            smooth: true,
+            symbolSize: 4
+        }
+    ],
+    title: {
+        x: "center",
+        textStyle: {
+            fontSize: 28
+        }
+    },
+    grid: {
+        x: 80,
+        y: 60,
+        y2: 60,
+        x2: 40
+    }
+};
+
+var dom2 = document.getElementById("container2");
+var myChart2 = echarts.init(dom2, 'dark');
+option2 = null;
+option2 = {
+    grid: {
+        x: 10,
+        y: 60,
+        y2: 60,
+        x2: 80
+    },
+    tooltip: {
+        trigger: "axis"
+    },
+    toolbox: {
+        show: false,
+        feature: {
+            mark: {
+                show: true
+            },
+            dataView: {
+                show: true,
+                readOnly: true
+            },
+            magicType: {
+                show: false,
+                type: ["line", "bar"]
+            },
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type: "value",
+            boundaryGap: [0, 0.01],
+            axisLabel: {
+                show: false
+            }
+        }
+    ],
+    yAxis: [
+        {
+            type: "category",
+            data: ["数量"],
+            axisLabel: {
+                show: false
+            }
+        }
+    ],
+    series: [
+        {
+            name: "确诊",
+            type: "bar",
+            data: [],
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        textStyle: {
+                            fontSize: 20,
+			color: "rgb(0, 127, 255)"
+                        },
+                        position: "right"
+                    },
+                    color: "rgb(0, 127, 255)"
+                }
+            },
+            yAxisIndex: 0
+        },
+        {
+            name: "治愈",
+            type: "bar",
+            data: [],
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        textStyle: {
+                            fontSize: 20,
+			color: "rgb(153, 204, 51)"
+                        },
+                        position: "right"
+                    },
+                    color: "rgb(153, 204, 51)"
+                }
+            }
+        },
+        {
+            type: "bar",
+            name: "死亡",
+            data: [],
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        textStyle: {
+                            fontSize: 20,
+                    color: "rgb(255, 86, 86)"
+                        },
+                        position: "right"
+                    },
+                    color: "rgb(255, 86, 86)"
+                }
+            }
+        }
+    ]
+};
+
+var dom3 = document.getElementById("container3");
+var myChart3 = echarts.init(dom3, 'dark');
+option3 = null;
+option3 = {
+    tooltip: {
+        formatter: "{a} <br/>{b} : {c}%"
+    },
+    toolbox: {
+        show: false,
+        feature: {
+            mark: {
+                show: true
+            },
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
+    series: [
+        {
+            name: "死亡率",
+            type: "gauge",
+            detail: {
+                formatter: "{value}%",
+			    textStyle: {
+			                       fontSize: 20
+			                   }
+            },
+            data: [
+                {
+                    value: 0,
+                    name: "死亡率"
+                }
+            ],
+            title: {
+                show: true,
+                textStyle: {
+                    fontSize: 20,
+		   color: "rgb(255, 86, 86)",
+                    fontStyle: "bold"
+                }
+            },
+            axisLine: {
+                lineStyle: {
+                    color: [[0.2, "#99cc33"], [0.8, "rgb(0, 127, 255)"], [1, "rgb(255, 86, 86)"]]
+                }
+            }
+        }
+    ],
+    color: []
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+    myChart1.setOption(option1, true);
+    myChart2.setOption(option2, true);
+    myChart3.setOption(option3, true);
+}
+
+
+setInterval(function(){
+	if (count<max_count){
+	count=count+1;
+           refreshData();
+	   }
+       },300);
+	   
+function refreshData(data){
+     if(!myChart){
+          return;
+     }
+     //更新数据
+      var option = myChart.getOption();
+      option.series[0].data = my_data[count];
+      option.title =my_title[count];
+      myChart.setOption(option);  
+      
+     var option1 = myChart1.getOption();
+     option1.xAxis[0].data = my_cate;
+     option1.series[0].data =my_confirm[count];
+     option1.series[1].data =my_cure[count];
+     option1.series[2].data =my_dead[count];
+     myChart1.setOption(option1);   
+	 
+     var option2 = myChart2.getOption();
+     option2.series[0].data =last_confirm[count];
+     option2.series[1].data =last_cure[count];
+     option2.series[2].data =last_dead[count];
+     myChart2.setOption(option2);    
+      
+     var option3 = myChart3.getOption();
+     option3.series[0].data =dead_rate[count];
+     myChart3.setOption(option3);    
+}
+       </script>
+   </body>
+</html>
