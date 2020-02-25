@@ -2,10 +2,11 @@ library("jsonlite")
 # Wuhan-2019-nCoV.csv
 # https://raw.githubusercontent.com/canghailan/Wuhan-2019-nCoV/master/Wuhan-2019-nCoV.csv
 data <- read.csv("Wuhan-2019-nCoV.csv",header = TRUE, stringsAsFactors = FALSE, fileEncoding="utf8")
+#data <- read.csv("https://raw.githubusercontent.com/canghailan/Wuhan-2019-nCoV/master/Wuhan-2019-nCoV.csv",header = TRUE, stringsAsFactors = FALSE, fileEncoding="utf8")
 # range of date
-d <- c(paste0("2020-01-0", 1:9),paste0("2020-01-", 10:31), paste0("2020-02-0", 1:9),paste0("2020-02-", 10:18))
+d <- c(paste0("2020-01-0", 1:9),paste0("2020-01-", 10:31), paste0("2020-02-0", 1:9),paste0("2020-02-", 10:24))
 
-province_data <- data[data$countryCode == "CN" & data$province!="" & data$city=="",c(1,4,8,10) ]
+province_data <- data[data$countryCode == "CN" & data$province!="" & data$city=="",c(1,4,8,10,11) ]
 province_data$province <- sub("省", "", province_data$province)
 province_data$province <- sub("自治区", "", province_data$province)
 province_data$province <- sub("市", "", province_data$province)
@@ -14,7 +15,7 @@ province_data$province <- sub("维吾尔", "", province_data$province)
 province_data$province <- sub("壮族", "", province_data$province)
 province_data$province <- sub("回族", "", province_data$province)
 province_data$province <- sub(" ", "", province_data$province)
-province_data$confirmed <- province_data$confirmed - province_data$cured
+province_data$confirmed <- province_data$confirmed - province_data$cured - province_data$dead
 
 write(paste0("max_count=",length(d),";"),file="data.js", append = F)
 write("var my_cate = [];",file="data.js", append = T)

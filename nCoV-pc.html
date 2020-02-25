@@ -3,7 +3,7 @@
    <head>
        <meta charset="utf-8">
    </head>
-   <body style="height: 100%; margin: 0">
+   <body style="height: 100%; margin: 0; background-color: #333333">
       <div style="height: 100%;width:40%;float: right">
       <div style="height: 40%;width:100%">
       	 <div id="container3" style="height: 100%;width:50%;float: left"></div>
@@ -51,15 +51,24 @@ option = {
     tooltip: {
         trigger: "item"
     },
-    dataRange: {
-        min: 0,
-        max: 1000,
-        x: 80,
-        text: [">1000", "0"],
-        color: ["rgb(128, 0, 0)", "rgb(255, 128, 96)", "rgb(255, 255, 192)"],
-        y: "70%",
-        calculable: false
-    },
+    visualMap: {
+       	 	min: 0,
+       		max: 1000,
+        	x: 80,
+		pieces: [
+		    {min: 10000, label: '≥10000',color:'#65040c'}, // 不指定 max，表示 max 为无限大（Infinity）。
+		    {min: 1000, max: 9999, label: '1000-9999',color:'#8a1014'},
+		    {min: 100, max: 999, label: '100-999',color:'#ca2b2f'},
+		    {min: 10, max: 99, label: '10-99',color:'#fd7c6d'},
+		    {min: 1, max: 9, label: '1-9',color:'#fdaa88'},
+		    {min: -100, max:0 ,label: '0', color: '#eeeeee'}     // 不指定 min，表示 min 为无限大（-Infinity）。
+		],
+	        textStyle: {
+	            color: '#ffffff'
+	        },
+        	y: "70%",
+       	 	calculable: false
+	    },
     toolbox: {
         orient: "vertical",
         x: "right",
@@ -383,8 +392,9 @@ option3 = {
             type: "gauge",
             detail: {
                 formatter: "{value}%",
+                offsetCenter: [0, 80],
 			    textStyle: {
-			                       fontSize: 20
+					fontSize: 20
 			                   }
             },
             data: [
@@ -399,7 +409,8 @@ option3 = {
                     fontSize: 20,
 		   color: "rgb(255, 86, 86)",
                     fontStyle: "bold"
-                }
+                },
+                offsetCenter: [0, -28]
             },
             axisLine: {
                 lineStyle: {
